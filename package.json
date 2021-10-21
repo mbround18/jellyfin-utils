@@ -3,8 +3,15 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "lint": "pretty-quick"
+  },
   "dependencies": {
     "glob": "^7.2.0",
     "jsmediatags": "^3.9.7"
+  },
+  "devDependencies": {
+    "prettier": "^2.4.1",
+    "pretty-quick": "^3.1.1"
   }
 }

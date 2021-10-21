@@ -1,0 +1,6 @@
+iac-jellyfin/
+kube-utils/
+cache/
+config/
+node_modules/
+media/
