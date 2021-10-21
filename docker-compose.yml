@@ -1,0 +1,11 @@
+version: "3.5"
+services:
+  jellyfin:
+    image: jellyfin/jellyfin
+    container_name: jellyfin
+    ports:
+      - "8080:8096"
+    volumes:
+      - ./config:/config
+      - ./cache:/cache
+      - ./media:/media

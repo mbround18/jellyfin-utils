@@ -1,0 +1,10 @@
+{
+  "name": "jellyfin-demo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "glob": "^7.2.0",
+    "jsmediatags": "^3.9.7"
+  }
+}
