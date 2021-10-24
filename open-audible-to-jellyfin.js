@@ -4,7 +4,7 @@ const glob = require("glob");
 const jsmediatags = require("jsmediatags");
 const source = path.resolve(process.argv[2]);
 const destination = path.resolve(process.argv[3]);
-const books = glob.sync(source + "/**/*.mp3");
+let books = glob.sync(source + "/**/*.mp3");
 
 /**
  *
@@ -16,22 +16,50 @@ const books = glob.sync(source + "/**/*.mp3");
  *
  */
 
-books.forEach(function (book) {
-  jsmediatags.read(book, {
-    onSuccess: function ({ tags: { artist } }) {
-      const fileName = path.basename(book);
-      console.log(`Processing: ${fileName} by ${artist}`);
-      const filePath = path.join(destination, artist, fileName);
-      if (!fs.existsSync(path.dirname(filePath))) {
-        fs.mkdirSync(path.dirname(filePath), { recursive: true });
-        fs.copyFileSync(book, filePath);
-        console.log(`Completed: ${fileName} by ${artist}`);
+async function main() {
+  books = await Promise.all(
+    books.map(async function (book) {
+      return new Promise(function (resolve, reject) {
+        jsmediatags.read(book, {
+          onSuccess: function ({ tags: { artist } }) {
+            resolve({
+              source: book,
+              destination: path.join(destination, artist, path.basename(book)),
+              artist: artist,
+              title: path.basename(book, ".mp3"),
+            });
+          },
+          onError: function (error) {
+            reject(error);
+          },
+        });
+      });
+    })
+  );
+  /**
+   * @typedef Book
+   * @type {object}
+   * @property {string} source - path to mp3 file
+   * @property {string} destination - path to destination folder
+   * @property {string} artist - artist name
+   * @property {string} title - title of book
+   */
+
+  books.forEach(
+    /**
+     *
+     * @param {Book} book
+     */
+    function (book) {
+      if (!fs.existsSync(book.destination)) {
+        console.log(`Copying ${book.source} to ${book.destination}`);
+        fs.mkdirSync(path.dirname(book.destination), { recursive: true });
+        fs.copyFileSync(book.source, book.destination);
       } else {
-        console.log(`Skipped: ${fileName} by ${artist}`);
+        console.log(`${book.destination} already exists`);
       }
-    },
-    onError: function (error) {
-      console.log(error);
-    },
-  });
-});
+    }
+  );
+}
+
+main().then(console.log).catch(console.error);
