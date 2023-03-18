@@ -7,7 +7,7 @@
     "lint": "pretty-quick"
   },
   "dependencies": {
-    "glob": "^7.2.0",
+    "glob": "^9.0.0",
     "jsmediatags": "^3.9.7",
     "lodash": "^4.17.21"
   },
