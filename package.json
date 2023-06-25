@@ -12,7 +12,7 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "prettier": "2.4.1",
+    "prettier": "2.8.8",
     "pretty-quick": "3.1.3"
   }
 }
